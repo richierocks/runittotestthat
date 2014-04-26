@@ -1,0 +1,17 @@
+\name{convert_line}
+\alias{convert_line}
+\title{Convert lines of RUnit code to testthat code}
+\usage{
+convert_line(x)
+}
+\arguments{
+  \item{x}{An R language object.}
+}
+\value{
+An object of class \code{call}.
+}
+\description{
+Converts lines of \code{RUnit} code to the equivalent
+\code{testthat} code.
+}
+

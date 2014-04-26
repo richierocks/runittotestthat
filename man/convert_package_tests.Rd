@@ -1,0 +1,57 @@
+\name{convert_package_tests}
+\alias{convert_package_tests}
+\alias{convert_package_tests.character}
+\alias{convert_package_tests.package}
+\title{Convert a package worth of RUnit tests to testthat tests}
+\usage{
+convert_package_tests(pkg, test_dir = "inst/tests",
+  test_file_regexp = "^runit.+\\\\.[rR]", test_func_regexp = "^test.+",
+  testthat_files = stdout(), ...)
+
+\method{convert_package_tests}{package}(pkg, test_dir = "inst/tests",
+  test_file_regexp = "^runit.+\\\\.[rR]", test_func_regexp = "^test.+",
+  testthat_files = stdout(), ...)
+
+\method{convert_package_tests}{character}(pkg, test_dir = "inst/tests",
+  test_file_regexp = "^runit.+\\\\.[rR]", test_func_regexp = "^test.+",
+  testthat_files = stdout(), ...)
+}
+\arguments{
+  \item{pkg}{Either a string containing a path to a package
+  or a \code{devtools::package} object.}
+
+  \item{test_dir}{Directory inside the package containing
+  test files.}
+
+  \item{test_file_regexp}{Regular expression determining
+  which files are considered to contain tests.}
+
+  \item{test_func_regexp}{Regular expression determining
+  which functions in the tests files are considered to be
+  tests.}
+
+  \item{testthat_files}{Character vector of paths for the
+  output files. Defaults to \code{stdout()} to prevent you
+  overwriting your existing test files. Use
+  \code{runit_files} to refer to the original \code{RUnit}
+  test files.}
+
+  \item{...}{Not currently used.}
+}
+\value{
+A list of lists of calls.  Each call element is a
+\code{testthat} test. The names of the top level list
+correspond to the names of the input test files.  The names
+of the sublists correspond to the names of the \code{RUnit}
+test functions in that file.
+}
+\description{
+Converts all RUnit tests in a package to testthat tests,
+and writes them out to a file.
+}
+\note{
+\code{RUnit} tests will be evaluated when they are read in,
+so make sure that all your tests pass before you convert
+them.
+}
+

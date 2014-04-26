@@ -1,0 +1,17 @@
+\name{convert_repeat}
+\alias{convert_repeat}
+\title{Convert a repeat block.}
+\usage{
+convert_repeat(x)
+}
+\arguments{
+  \item{x}{A call to the \code{\link[base]{repeat}}
+  function.}
+}
+\value{
+x An object of class \code{call}.
+}
+\description{
+Converts a \code{repeat} call.
+}
+

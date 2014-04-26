@@ -1,0 +1,18 @@
+\name{convert_checkEqualsNumeric}
+\alias{convert_checkEqualsNumeric}
+\title{Convert a checkEqualsNumeric call.}
+\usage{
+convert_checkEqualsNumeric(x)
+}
+\arguments{
+  \item{x}{A call to the
+  \code{\link[RUnit]{checkEqualsNumeric}} function.}
+}
+\value{
+x A call to the \code{\link[testthat]{expect_equal}}
+function.
+}
+\description{
+Converts a \code{checkEqualsNumeric} call.
+}
+

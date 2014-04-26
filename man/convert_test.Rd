@@ -1,0 +1,27 @@
+\name{convert_test}
+\alias{convert_test}
+\title{Convert an RUnit test to a testthat test}
+\usage{
+convert_test(runit_test_fn,
+  test_description = assertive::get_name_in_parent(runit_test_fn))
+}
+\arguments{
+  \item{runit_test_fn}{An \code{RUnit} test function.}
+
+  \item{test_description}{A string describing the test,
+  defaulting to the name of the \code{RUnit} test
+  function.}
+}
+\value{
+A call to \code{test_that}, containing a \code{testhat}
+test equivalent to the input \code{RUnit} test.
+}
+\description{
+Converts a single RUnit test to a testthat test.
+}
+\note{
+Conversion of \code{RUnit} \code{check*} functions inside
+\code{switch} statements is not yet supported.  If you have
+these, you are probably crazy.
+}
+

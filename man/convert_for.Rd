@@ -1,0 +1,16 @@
+\name{convert_for}
+\alias{convert_for}
+\title{Convert a for block.}
+\usage{
+convert_for(x)
+}
+\arguments{
+  \item{x}{A call to the \code{\link[base]{for}} function.}
+}
+\value{
+x An object of class \code{call}.
+}
+\description{
+Converts a \code{for} call.
+}
+

@@ -1,0 +1,5 @@
+S3method(convert_package_tests,character)
+S3method(convert_package_tests,package)
+export(convert_package_tests)
+export(convert_test)
+export(convert_test_file)

@@ -1,0 +1,18 @@
+\name{convert_checkException}
+\alias{convert_checkException}
+\title{Convert a checkException call.}
+\usage{
+convert_checkException(x)
+}
+\arguments{
+  \item{x}{A call to the
+  \code{\link[RUnit]{checkException}} function.}
+}
+\value{
+x A call to the \code{\link[testthat]{expect_error}}
+function.
+}
+\description{
+Converts a \code{checkException} call.
+}
+
