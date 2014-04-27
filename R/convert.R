@@ -122,8 +122,9 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
       }
     )  
   )
-  if(!file.exists(testthat_file) || 
-       get_yes_no_response("The file ", sQuote(testthat_file), "already exists. Overwrite (yes/no)? > "))
+  if(is_stdout(testthat_file) || 
+     !file.exists(as.character(testthat_file)) || 
+     get_yes_no_response("The file ", sQuote(testthat_file), "already exists. Overwrite (yes/no)? > "))
   {
     message("Writing tests to ", sQuote(testthat_file))
     cat(output, file = testthat_file, sep = "\n")
