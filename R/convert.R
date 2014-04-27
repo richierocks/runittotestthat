@@ -188,6 +188,7 @@ convert_line <- function(x)
     "repeat"           = convert_repeat(x),
     "if"               = convert_if(x),
     "switch"           = convert_switch(x),
+    "{"                = convert_brace(x),
     x
   )
 }
@@ -305,7 +306,7 @@ convert_checkTrue <- function(x)
 convert_for <- function(x)
 {
   the_loop <- as.list(x)
-  call("for", the_loop[[2]], the_loop[[3]], convert_lines(the_loop[[4]]))
+  call("for", the_loop[[2]], the_loop[[3]], convert_line(the_loop[[4]]))
 }
 
 #' Convert a while block.
@@ -353,17 +354,32 @@ convert_if <- function(x)
 
 #' Convert a switch block.
 #' 
-#' Converts a \code{switch} call.  Not yet implemented.  Sorry.
+#' Converts a \code{switch} call. 
 #' 
 #' @param x A call to the \code{\link[base]{switch}} function.
 #' @return x the input, with a warning.
 convert_switch <- function(x)
 {
-  warning("Converting code inside switch statements is not yet supported.")
-  x
-  ## the following lines don't work because do.call tries to evaulate symbols 
-  ## before it passes them to call
-  #       the_flow <- as.list(x)
-  #       additional_args <- the_flow[-1:-2]
-  #       do.call("call", c("switch", the_flow[[2]], lapply(additional_args, convert_lines)))
+  the_flow <- as.list(x)
+  converted <- lapply(the_flow[-1:-2], convert_line)
+  as.call(c(as.name("switch"), the_flow[[2]], converted))
+}
+
+#' Convert a code block.
+#' 
+#' Converts a \code{switch} call.  
+#' 
+#' @param x A call to the brace function.
+#' @return x the input, with a warning.
+convert_brace <- function(x)
+{
+  the_block <- as.list(x)
+  if(length(the_block) == 1)
+  {
+    return(x)
+  } else 
+  {
+    converted <- lapply(the_block[-1], convert_line)
+    as.call(c(as.name("{"), converted))
+  }
 }
