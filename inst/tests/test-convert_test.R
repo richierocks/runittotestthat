@@ -1,0 +1,269 @@
+library(RUnit)
+
+test_that(
+  "simple, unbraced check* functions are converted to expect_* functions.",
+  {
+    # Notice that the arguments are (deliberately) swapped in checkEquals vs. 
+    # expect_equal.
+    runit_test <- function()
+    {
+      x <- 1:10
+      checkTrue(all(x > 0))
+      checkTrue(!any(x < 0))
+      checkIdentical(1:10, x)
+      checkEquals(seq.int(2, 20, 2) / 2, x)
+      checkEqualsNumeric(seq.int(2, 20, 2) / 2, x)
+      checkException(stop("!!!"))
+    }   
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          x <- 1:10
+          expect_true(all(x > 0))
+          expect_false(any(x < 0))
+          expect_identical(x, 1:10)
+          expect_equal(x, seq.int(2, 20, 2) / 2)
+          expect_equal(x, seq.int(2, 20, 2) / 2)
+          expect_error(stop("!!!"))
+        }
+      )  
+    )
+    expect_equal(convert_test(runit_test, "runit_test"), expected)
+  }
+)
+
+test_that(
+  "checks inside braces are converted.",
+  {
+    runit_test <- function()
+    {
+      {
+        {
+          x <- 2
+          checkTrue(x > 1)
+        }
+      }
+    }   
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          {
+            {
+              x <- 2
+              expect_true(x > 1)
+            }
+          }
+        }
+      )
+    )
+    expect_equal(convert_test(runit_test, "runit_test"), expected)
+  }
+)
+
+test_that(
+  "checks inside for loops (no braces) are converted.",
+  {
+    runit_test <- function()
+    {
+      for(i in 1:3) checkTrue(i > 0)
+    }   
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          for(i in 1:3) expect_true(i > 0)
+        }
+      )
+    )
+    expect_equal(convert_test(runit_test, "runit_test"), expected)
+  }
+)
+
+test_that(
+  "checks inside for loops (with braces) are converted.",
+  {
+    runit_test <- function()
+    {
+      for(i in 1:3)
+      {
+        x <- i
+        checkTrue(x > 0)
+      }
+    }   
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          for(i in 1:3)
+          {
+            x <- i
+            expect_true(x > 0)
+          }
+        }
+      )
+    )
+    expect_equal(convert_test(runit_test, "runit_test"), expected)
+  }
+)
+
+test_that(
+  "checks inside switch statements are converted.",
+  {
+    runit_test <- function()
+    {
+      switch(
+        "b", 
+        a = mean(1:5),
+        b = checkEquals(0, 0)
+      )
+    }   
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          switch(
+            "b", 
+            a = mean(1:5),
+            b = expect_equal(0, 0)
+          )
+        }
+      )
+    )
+  expect_equal(convert_test(runit_test, "runit_test"), expected)
+  }
+)
+
+test_that(
+  "checks inside nested switch statements are converted.",
+  {
+    runit_test <- function()
+    {
+      x <- "richie"
+      switch(
+        x,
+        richie = {
+          switch(
+            x,
+            richie = {
+              checkException(stop("!!!"))
+            }
+          )
+        },
+        cotton = {
+          checkIdentical("cotton", x)
+        }
+      )
+    }   
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          x <- "richie"
+          switch(
+            x,
+            richie = {
+              switch(
+                x,
+                richie = {
+                  expect_error(stop("!!!"))  
+                }
+              )
+            },
+            cotton = {
+              expect_identical(x, "cotton")
+            }
+          )
+        }
+      )
+    )
+  expect_equal(convert_test(runit_test, "runit_test"), expected)
+  }
+)
+
+test_that(
+  "checks inside (possibly nested) loops or if blocks are converted.",
+  {
+    runit_test <- function()
+    {
+      x <- 6:10
+      for(i in 1:5)
+      {
+        if(i %% 2 == 0)
+        {
+          checkTrue(all(x > i), msg = "i divisible by 2") 
+          if(i == 4)
+          {
+            checkIdentical(4, i, msg = "i = 4")
+          } else
+          {
+            while(i > 0) 
+            {
+              checkIdentical(2, i, msg = "i = 2")
+            }
+            repeat
+            {
+              checkException(stop("!!!"))
+              break
+            }
+          }
+        }               
+      }
+    }
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          x <- 6:10
+          for(i in 1:5)
+          {
+            if(i %% 2 == 0)
+            {
+              expect_true(all(x > i), info = "i divisible by 2") 
+              if(i == 4)
+              {
+                expect_identical(i, 4, info = "i = 4")
+              } else
+              {
+                while(i > 0) 
+                {
+                  expect_identical(i, 2, info = "i = 2")
+                }
+                repeat
+                {
+                  expect_error(stop("!!!"))
+                  break
+                }
+              }
+            }               
+          }
+        }
+      )  
+    )
+    expect_equal(convert_test(runit_test, "runit_test"), expected)    
+  }
+)
+
+test_that(
+  "failing tests still return a testthat test.",
+  {
+    # This is will not be the case if the RUnit test is in a file (due to the way
+    # that sys.source works).
+    runit_test <- function()
+    {
+      checkEquals(1, 2)
+    }
+    expected <- quote(
+      test_that(
+        "runit_test",
+        {
+          expect_equal(2, 1)
+        }
+      )  
+    )
+    expect_equal(convert_test(runit_test, "runit_test"), expected)    
+  }
+)
+
+
