@@ -12,7 +12,6 @@ convert_switch(x)
 x the input, with a warning.
 }
 \description{
-Converts a \code{switch} call.  Not yet implemented.
-Sorry.
+Converts a \code{switch} call.
 }
 

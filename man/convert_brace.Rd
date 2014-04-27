@@ -1,0 +1,16 @@
+\name{convert_brace}
+\alias{convert_brace}
+\title{Convert a code block.}
+\usage{
+convert_brace(x)
+}
+\arguments{
+  \item{x}{A call to the brace function.}
+}
+\value{
+x the input, with a warning.
+}
+\description{
+Converts a \code{switch} call.
+}
+
