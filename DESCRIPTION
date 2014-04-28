@@ -2,7 +2,7 @@ Package: runittotestthat
 Type: Package
 Title: Convert RUnit test functions into testthat tests.
 Version: 0.0-1
-Date: 2014-04-23
+Date: 2014-04-28
 Authors@R: person("Richard", "Cotton", role = c("aut", "cre"), email =
     "richierocks@gmail.com")
 Description: Automatically convert a file or package worth of RUnit test
@@ -10,9 +10,10 @@ Description: Automatically convert a file or package worth of RUnit test
 Depends:
     R (>= 2.15.0)
 Imports:
-    assertive,
+    assertive (>= 0.2-0),
     RUnit
-Enhances: testthat,
+Enhances: 
+    testthat,
     devtools
 License: Unlimited
 LazyLoad: yes
