@@ -17,6 +17,8 @@
 #' test. The names of the top level list correspond to the names of the input 
 #' test files.  The names of the sublists correspond to the names of the 
 #' \code{RUnit} test functions in that file.
+#' Each list element has an environment containing the original \code{RUnit}, 
+#' stored in \code{attr(, "runit_tests")}.
 #' @note \code{RUnit} tests will be evaluated when they are read in, so make 
 #' sure that all your tests pass before you convert them.
 #' @export
@@ -78,8 +80,12 @@ convert_package_tests.character <- function(pkg, test_dir = "inst/tests",
 #' @param test_func_regexp Regular expression determining which functions in the 
 #' tests files are considered to be tests.
 #' @param testthat_file String of path for the output file.  
-#' Defaults to \code{stdout()} to prevent you overwriting your existing test files.
-#' See note.
+#' Defaults to \code{stdout()} to prevent you overwriting your existing test 
+#' files.  See note.
+#' @return A list of calls to \code{test_that} is invisibly returned.  This list
+#' is also written to an output connection (defaulting to stdout).
+#' An environment containing the original \code{RUnit} is stored in 
+#' \code{attr(, "runit_tests")}.
 #' @note \code{RUnit} tests will be evaluated when they are read in, so make 
 #' sure that all your tests pass before you convert them.
 #' 
@@ -113,6 +119,7 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
       )
     }
   )
+  attr(new_tests, "runit_tests") <- e
   output <- unlist(
     lapply(
       new_tests,
