@@ -47,7 +47,8 @@ convert_package_tests.package <- function(pkg, test_dir = "inst/tests",
 }
 
 #' @method convert_package_tests character
-#' @rdname convert_package_tests 
+#' @rdname convert_package_tests
+#' @importFrom assertive is_empty
 #' @export
 convert_package_tests.character <- function(pkg, test_dir = "inst/tests", 
   test_file_regexp = "^runit.+\\.[rR]", test_func_regexp = "^test.+", 
@@ -58,7 +59,7 @@ convert_package_tests.character <- function(pkg, test_dir = "inst/tests",
     pattern    = test_file_regexp, 
     full.names = TRUE
   )
-  if(assertive::is_empty(runit_files))
+  if(is_empty(runit_files))
   {
     warning("There are no test files to convert.")
     return(invisible(list()))
@@ -93,6 +94,8 @@ convert_package_tests.character <- function(pkg, test_dir = "inst/tests",
 #' argument.  For example, if you use the traditional \code{RUnit} test file 
 #' naming strategy, something like \code{sub("^runit", "testthat", runit_file)}
 #' may be appropriate.
+#' @importFrom assertive is_empty
+#' @importFrom assertive is_stdout
 #' @export
 convert_test_file <- function(runit_file, test_func_regexp = "^test.+", 
   testthat_file = stdout())
@@ -100,7 +103,7 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
   e <- new.env()
   sys.source(runit_file, envir = e)
   test_fn_names <- ls(e, pattern = test_func_regexp)
-  if(assertive::is_empty(test_fn_names))
+  if(is_empty(test_fn_names))
   {
     warning(
       "There are no test functions in the file ", 
@@ -147,8 +150,14 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
 #' the name of the \code{RUnit} test function.
 #' @return A call to \code{test_that}, containing a \code{testhat} test 
 #' equivalent to the input \code{RUnit} test.
-#' @note Conversion of \code{RUnit} \code{check*} functions inside \code{switch}
-#' statements is not yet supported.  If you have these, you are probably crazy.
+#' @examples
+#' an_runit_test <- function()
+#' {
+#'   x <- sqrt(1:5)
+#'   expected <- c(1, 4, 9, 16, 25)
+#'   checkEquals(x ^ 4, expected)
+#' }
+#' convert_test(an_runit_test)
 #' @export
 convert_test <- function(runit_test_fn, 
   test_description = assertive::get_name_in_parent(runit_test_fn))
