@@ -151,13 +151,24 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
 #' @return A call to \code{test_that}, containing a \code{testhat} test 
 #' equivalent to the input \code{RUnit} test.
 #' @examples
-#' an_runit_test <- function()
+#' test_truth <- function()
+#' {
+#'   x <- all(runif(10) > 0)
+#'   checkTrue(x)
+#' }
+#' convert_test(test_truth)
+#' test_equality <- function()
 #' {
 #'   x <- sqrt(1:5)
 #'   expected <- c(1, 4, 9, 16, 25)
-#'   checkEquals(x ^ 4, expected)
+#'   checkEquals(expected, x ^ 4)
 #' }
-#' convert_test(an_runit_test)
+#' convert_test(test_equality)
+#' test_error <- function()
+#' {
+#'   checkException("1" + "2")
+#' }
+#' convert_test(test_error)
 #' @export
 convert_test <- function(runit_test_fn, 
   test_description = assertive::get_name_in_parent(runit_test_fn))
