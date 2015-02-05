@@ -1,6 +1,94 @@
 library(RUnit)
 
 test_that(
+  "checkTrue gets converted to expect_true",
+  {
+    test_truth <- function()
+    {
+      x <- all(runif(10) > 0)
+      checkTrue(x)
+    } 
+    expected <- quote(
+      test_that(
+        "test_truth",
+        {
+          x <- all(runif(10) > 0)
+          expect_true(x)
+        }
+      )    
+    )
+    actual <- convert_test(test_truth)
+    expect_equal(actual, expected)    
+  }
+)
+
+test_that(
+  "not checkTrue gets converted to expect_false",
+  {
+    test_falsity <- function()
+    {
+      x <- any(runif(10) < 0)
+      !checkTrue(x)
+    } 
+    expected <- quote(
+      test_that(
+        "test_falsity",
+        {
+          x <- any(runif(10) < 0)
+          expect_false(x)
+        }
+      )    
+    )
+    actual <- convert_test(test_falsity)
+    expect_equal(actual, expected)    
+  }
+)
+
+test_that(
+  "checkEquals gets converted to expect_equals",
+  {
+    test_equality <- function()
+    {
+      x <- sqrt(1:5)
+      expected <- c(1, 4, 9, 16, 25)
+      checkEquals(x ^ 4, expected)
+    } 
+    expected <- quote(
+      test_that(
+        "test_equality",
+        {
+          x <- sqrt(1:5)
+          expected <- c(1, 4, 9, 16, 25)
+          checkEquals(expected, x ^ 4)
+        }
+      )    
+    )
+    actual <- convert_test(test_equality)
+    expect_equal(actual, expected)    
+  }
+)
+
+test_that(
+  "checkException gets converted to expect_error",
+  {
+    test_error <- function()
+    {
+      checkException("1" + "2")
+    }
+    expected <- quote(
+      test_that(
+        "test_error",
+        {
+          expect_error("1" + "2")
+        }
+      )
+    )
+    actual <- convert_test(test_error)
+    expect_equal(actual, expected)    
+  }
+)
+
+test_that(
   "simple, unbraced check* functions are converted to expect_* functions.",
   {
     # Notice that the arguments are (deliberately) swapped in checkEquals vs. 
