@@ -40,4 +40,7 @@ test_error <- function()
 }
 convert_test(test_error)
 }
+\seealso{
+\code{\link{convert_package_tests}}, \code{\link{convert_test_file}}
+}
 

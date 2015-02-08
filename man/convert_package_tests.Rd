@@ -52,4 +52,7 @@ to a file.
 \code{RUnit} tests will be evaluated when they are read in, so make
 sure that all your tests pass before you convert them.
 }
+\seealso{
+\code{\link{convert_test_file}}, \code{\link{convert_test}}
+}
 

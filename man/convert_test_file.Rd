@@ -60,4 +60,7 @@ test_error <- function()
 convert_test_file(tmp)
 }
 }
+\seealso{
+\code{\link{convert_package_tests}}, \code{\link{convert_test}}
+}
 
