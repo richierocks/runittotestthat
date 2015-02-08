@@ -28,7 +28,7 @@ test_that(
     test_falsity <- function()
     {
       x <- any(runif(10) < 0)
-      !checkTrue(x)
+      checkTrue(!x)
     } 
     expected <- quote(
       test_that(
@@ -51,7 +51,7 @@ test_that(
     {
       x <- sqrt(1:5)
       expected <- c(1, 4, 9, 16, 25)
-      checkEquals(x ^ 4, expected)
+      checkEquals(expected, x ^ 4)
     } 
     expected <- quote(
       test_that(
@@ -59,11 +59,59 @@ test_that(
         {
           x <- sqrt(1:5)
           expected <- c(1, 4, 9, 16, 25)
-          checkEquals(expected, x ^ 4)
+          expect_equal(x ^ 4, expected)
         }
       )    
     )
     actual <- convert_test(test_equality)
+    expect_equal(actual, expected)    
+  }
+)
+
+test_that(
+  "checkEqualsNumeric gets converted to expect_equals",
+  {
+    test_equality <- function()
+    {
+      x <- sqrt(1:5)
+      expected <- c(1, 4, 9, 16, 25)
+      checkEqualsNumeric(expected, x ^ 4)
+    } 
+    expected <- quote(
+      test_that(
+        "test_equality",
+        {
+          x <- sqrt(1:5)
+          expected <- c(1, 4, 9, 16, 25)
+          expect_equal(x ^ 4, expected)
+        }
+      )    
+    )
+  actual <- convert_test(test_equality)
+  expect_equal(actual, expected)    
+  }
+)
+
+test_that(
+  "checkIdentical gets converted to expect_identical",
+  {
+    test_identicality <- function()
+    {
+      x <- paste(letters[1:10], collapse = " ")
+      expected <- "a b c d e f g h i j"
+      checkIdentical(expected, x)
+    } 
+    expected <- quote(
+      test_that(
+        "test_identicality",
+        {
+          x <- paste(letters[1:10], collapse = " ")
+          expected <- "a b c d e f g h i j"
+          expect_identical(x, expected)
+        }
+      )    
+    )
+    actual <- convert_test(test_identicality)
     expect_equal(actual, expected)    
   }
 )
@@ -124,7 +172,7 @@ test_that(
 test_that(
   "checks inside braces are converted.",
   {
-    runit_test <- function()
+    test_braces <- function()
     {
       {
         {
@@ -135,7 +183,7 @@ test_that(
     }   
     expected <- quote(
       test_that(
-        "runit_test",
+        "test_braces",
         {
           {
             {
@@ -146,33 +194,35 @@ test_that(
         }
       )
     )
-    expect_equal(convert_test(runit_test, "runit_test"), expected)
+    actual <- convert_test(test_braces)
+    expect_equal(actual, expected)
   }
 )
 
 test_that(
   "checks inside for loops (no braces) are converted.",
   {
-    runit_test <- function()
+    test_for_loops_no_braces <- function()
     {
       for(i in 1:3) checkTrue(i > 0)
     }   
     expected <- quote(
       test_that(
-        "runit_test",
+        "test_for_loops_no_braces",
         {
           for(i in 1:3) expect_true(i > 0)
         }
       )
     )
-    expect_equal(convert_test(runit_test, "runit_test"), expected)
+    actual <- convert_test(test_for_loops_no_braces)
+    expect_equal(actual, expected)
   }
 )
 
 test_that(
   "checks inside for loops (with braces) are converted.",
   {
-    runit_test <- function()
+    test_for_loops_with_braces <- function()
     {
       for(i in 1:3)
       {
@@ -182,7 +232,7 @@ test_that(
     }   
     expected <- quote(
       test_that(
-        "runit_test",
+        "test_for_loops_with_braces",
         {
           for(i in 1:3)
           {
@@ -192,14 +242,15 @@ test_that(
         }
       )
     )
-    expect_equal(convert_test(runit_test, "runit_test"), expected)
+    actual <- convert_test(test_for_loops_with_braces)
+    expect_equal(actual, expected)
   }
 )
 
 test_that(
   "checks inside switch statements are converted.",
   {
-    runit_test <- function()
+    test_switch <- function()
     {
       switch(
         "b", 
@@ -209,7 +260,7 @@ test_that(
     }   
     expected <- quote(
       test_that(
-        "runit_test",
+        "test_switch",
         {
           switch(
             "b", 
@@ -219,14 +270,15 @@ test_that(
         }
       )
     )
-  expect_equal(convert_test(runit_test, "runit_test"), expected)
+    actual <- convert_test(test_switch)
+    expect_equal(actual, expected)
   }
 )
 
 test_that(
   "checks inside nested switch statements are converted.",
   {
-    runit_test <- function()
+    test_nested_switch <- function()
     {
       x <- "richie"
       switch(
@@ -246,7 +298,7 @@ test_that(
     }   
     expected <- quote(
       test_that(
-        "runit_test",
+        "test_nested_switch",
         {
           x <- "richie"
           switch(
@@ -266,14 +318,15 @@ test_that(
         }
       )
     )
-  expect_equal(convert_test(runit_test, "runit_test"), expected)
+    actual <- convert_test(test_nested_switch)
+    expect_equal(actual, expected)
   }
 )
 
 test_that(
   "checks inside (possibly nested) loops or if blocks are converted.",
   {
-    runit_test <- function()
+    test_nested_loops <- function()
     {
       x <- 6:10
       for(i in 1:5)
@@ -301,7 +354,7 @@ test_that(
     }
     expected <- quote(
       test_that(
-        "runit_test",
+        "test_nested_loops",
         {
           x <- 6:10
           for(i in 1:5)
@@ -329,7 +382,8 @@ test_that(
         }
       )  
     )
-    expect_equal(convert_test(runit_test, "runit_test"), expected)    
+    actual <- convert_test(test_nested_loops)
+    expect_equal(actual, expected) 
   }
 )
 
@@ -338,19 +392,20 @@ test_that(
   {
     # This is will not be the case if the RUnit test is in a file (due to the way
     # that sys.source works).
-    runit_test <- function()
+    failing_test <- function()
     {
       checkEquals(1, 2)
     }
     expected <- quote(
       test_that(
-        "runit_test",
+        "failing_test",
         {
           expect_equal(2, 1)
         }
       )  
     )
-    expect_equal(convert_test(runit_test, "runit_test"), expected)    
+    actual <- convert_test(failing_test)
+    expect_equal(actual, expected) 
   }
 )
 
