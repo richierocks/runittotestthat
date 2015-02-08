@@ -130,7 +130,7 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
   {
     warning(
       "There are no test functions in the file ", 
-      sQuote(runit_file), 
+      get_filename(runit_file), 
       " to convert."
     )
   }
@@ -157,9 +157,9 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
   )
   if(is_stdout(testthat_file) || 
      !file.exists(as.character(testthat_file)) || 
-     get_yes_no_response("The file ", sQuote(testthat_file), "already exists. Overwrite (yes/no)? > "))
+     get_yes_no_response("The file ", get_filename(testthat_file), "already exists. Overwrite (yes/no)? > "))
   {
-    message("Writing tests to ", sQuote(testthat_file))
+    message("Writing tests to ", get_filename(testthat_file))
     cat(output, file = testthat_file, sep = "\n")
   }  
   invisible(new_tests)
@@ -433,4 +433,22 @@ convert_brace <- function(x)
     converted <- lapply(the_block[-1], convert_line)
     as.call(c(as.name("{"), converted))
   }
+}
+
+#' Get a quoted filename
+#' 
+#' Gets a single quoted filename from a connection or path.
+#' @param x A \code{connection} object or a character vector of file paths.
+#' @return A character vector of paths to files.
+get_filename <- function(x)
+{
+  sQuote(
+    if(inherits(x, "connection"))
+    {
+      summary(x)$description
+    } else
+    {
+      as.character(x)
+    }
+  )
 }
