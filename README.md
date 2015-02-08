@@ -32,5 +32,5 @@ test.
 outputs them to a file (or file connection; `stdout` by default).
 
 3. `convert_package_tests` takes a string naming a package, or a 
-\code{devtools::package} object and loops over the files in `inst/tests` (or
+`devtools::package` object and loops over the files in `inst/tests` (or
 wherever you specify), converting the tests, and outputting to files or `stdout`.
