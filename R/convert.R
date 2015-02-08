@@ -322,12 +322,12 @@ convert_checkIdentical <- function(x)
 #' @param x A call to the \code{\link[RUnit]{checkTrue}} function.
 #' @return x A call to the \code{\link[testthat]{expect_true}} or 
 #' \code{\link[testthat]{expect_false}} function. (The later occurs if the input
-#' to \code{chekcTrue} was negated.)
+#' to \code{checkTrue} was negated.)
 convert_checkTrue <- function(x)
 {
   the_line <- as.list(match.call(RUnit::checkTrue, x))
   the_object <- as.list(the_line$expr)      
-  if(identical(match.fun(the_object[[1]]), `!`))
+  if(identical(deparse(the_object[[1]]), "!") && identical(match.fun(the_object[[1]]), `!`))
   {
     fixup(
       call(
