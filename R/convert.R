@@ -21,6 +21,7 @@
 #' stored in \code{attr(, "runit_tests")}.
 #' @note \code{RUnit} tests will be evaluated when they are read in, so make 
 #' sure that all your tests pass before you convert them.
+#' @seealso \code{\link{convert_test_file}}, \code{\link{convert_test}}
 #' @export
 convert_package_tests <- function(pkg, test_dir = "inst/tests", 
   test_file_regexp = "^runit.+\\.[rR]", test_func_regexp = "^test.+", 
@@ -96,6 +97,7 @@ convert_package_tests.character <- function(pkg, test_dir = "inst/tests",
 #' may be appropriate.
 #' @importFrom assertive is_empty
 #' @importFrom assertive is_stdout
+#' @seealso \code{\link{convert_package_tests}}, \code{\link{convert_test}}
 #' @examples
 #' \donttest{
 #' tmp <- tempfile()
@@ -173,6 +175,7 @@ convert_test_file <- function(runit_file, test_func_regexp = "^test.+",
 #' the name of the \code{RUnit} test function.
 #' @return A call to \code{test_that}, containing a \code{testhat} test 
 #' equivalent to the input \code{RUnit} test.
+#' @seealso \code{\link{convert_package_tests}}, \code{\link{convert_test_file}}
 #' @examples
 #' test_truth <- function()
 #' {
