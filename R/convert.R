@@ -96,6 +96,29 @@ convert_package_tests.character <- function(pkg, test_dir = "inst/tests",
 #' may be appropriate.
 #' @importFrom assertive is_empty
 #' @importFrom assertive is_stdout
+#' @examples
+#' \donttest{
+#' tmp <- tempfile()
+#' writeLines(
+#'   "test_truth <- function()
+#' {
+#'   x <- all(runif(10) > 0)
+#'   checkTrue(x)
+#' }
+#' test_equality <- function()
+#' {
+#'   x <- sqrt(1:5)
+#'   expected <- c(1, 4, 9, 16, 25)
+#'   checkEquals(expected, x ^ 4)
+#' }
+#' test_error <- function()
+#' {
+#'   checkException('1' + '2')
+#' }",
+#'   tmp
+#' )
+#' convert_test_file(tmp)
+#' }
 #' @export
 convert_test_file <- function(runit_file, test_func_regexp = "^test.+", 
   testthat_file = stdout())
