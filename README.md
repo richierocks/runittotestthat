@@ -8,25 +8,40 @@ There are three functions of interest:
 1. `convert_test` converts an individual `RUnit` test to a call to a `testthat` 
 test.
 
-    test_truth <- function()
-    {
-      x <- all(runif(10) > 0)
-      checkTrue(x)
-    }
-    convert_test(test_truth)
-    test_equality <- function()
-    {
-      x <- sqrt(1:5)
-      expected <- c(1, 4, 9, 16, 25)
-      checkEquals(expected, x ^ 4)
-    }
-    convert_test(test_equality)
-    test_error <- function()
-    {
-      checkException("1" + "2")
-    }
-    convert_test(test_error)
+```{r}
+test_truth <- function()
+{
+  x <- all(runif(10) > 0)
+  checkTrue(x)
+}
+convert_test(test_truth)
+## test_that("test_truth", {
+##     x <- all(runif(10) > 0)
+##     expect_true(x)
+## })
 
+test_equality <- function()
+{
+  x <- sqrt(1:5)
+  expected <- c(1, 4, 9, 16, 25)
+  checkEquals(expected, x ^ 4)
+}
+convert_test(test_equality)
+## test_that("test_equality", {
+##     x <- sqrt(1:5)
+##     expected <- c(1, 4, 9, 16, 25)
+##     expect_equal(x^4, expected)
+## })
+
+test_error <- function()
+{
+  checkException("1" + "2")
+}
+convert_test(test_error)
+## test_that("test_error", {
+##     expect_error("1" + "2")
+## })
+```
 
 2. `convert_test_file` sources all the tests in a file, converts each one, then
 outputs them to a file (or file connection; `stdout` by default).
