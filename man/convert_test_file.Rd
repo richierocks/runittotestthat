@@ -36,4 +36,28 @@ argument.  For example, if you use the traditional \code{RUnit} test file
 naming strategy, something like \code{sub("^runit", "testthat", runit_file)}
 may be appropriate.
 }
+\examples{
+\donttest{
+tmp <- tempfile()
+writeLines(
+  "test_truth <- function()
+{
+  x <- all(runif(10) > 0)
+  checkTrue(x)
+}
+test_equality <- function()
+{
+  x <- sqrt(1:5)
+  expected <- c(1, 4, 9, 16, 25)
+  checkEquals(expected, x ^ 4)
+}
+test_error <- function()
+{
+  checkException('1' + '2')
+}",
+  tmp
+)
+convert_test_file(tmp)
+}
+}
 

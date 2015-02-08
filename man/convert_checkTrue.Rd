@@ -12,7 +12,7 @@ convert_checkTrue(x)
 \value{
 x A call to the \code{\link[testthat]{expect_true}} or
 \code{\link[testthat]{expect_false}} function. (The later occurs if the input
-to \code{chekcTrue} was negated.)
+to \code{checkTrue} was negated.)
 }
 \description{
 Converts a \code{checkTrue} call.
