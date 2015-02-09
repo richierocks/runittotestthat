@@ -3,6 +3,23 @@ runittotestthat
 
 Convert `RUnit` tests to `testthat` tests.
 
+### Installation
+
+To install, you first need the devtools package.
+
+```{r}
+install.packages("devtools")
+```
+
+Then you can install the runittotestthat package using
+
+```{r}
+library(devtools)
+install_github("richierocks/runittotestthat")
+```
+
+### Converting tests
+
 There are three functions of interest: 
 
 1. `convert_test` converts an individual `RUnit` test to a call to a `testthat` 
