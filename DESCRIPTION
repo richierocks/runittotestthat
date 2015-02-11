@@ -1,6 +1,6 @@
 Package: runittotestthat
 Type: Package
-Title: Convert 'RUnit' Test Functions Into 'testthat' Tests
+Title: Convert 'RUnit' Test Functions into 'testthat' Tests
 Version: 0.0-2
 Date: 2015-02-09
 Author: Richard Cotton [aut, cre]
