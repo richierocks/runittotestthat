@@ -14,8 +14,9 @@ Depends:
 Imports:
     assertive (>= 0.2-1),
     RUnit
-Enhances: 
-    testthat,
+Suggests:
+    testthat
+Enhances:     
     devtools
 License: Unlimited
 LazyLoad: yes
