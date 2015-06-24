@@ -119,6 +119,7 @@ convert_package_tests.character <- function(pkg, test_dir = "inst/tests",
 #'   tmp
 #' )
 #' convert_test_file(tmp)
+#' unlink(tmp)
 #' @export
 convert_test_file <- function(runit_file, test_func_regexp = "^test.+", 
   testthat_file = stdout())
