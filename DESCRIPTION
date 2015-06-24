@@ -2,7 +2,7 @@ Package: runittotestthat
 Type: Package
 Title: Convert 'RUnit' Test Functions into 'testthat' Tests
 Version: 0.0-2
-Date: 2015-02-09
+Date: 2015-06-24
 Author: Richard Cotton [aut, cre]
 Maintainer: Richard Cotton <richierocks@gmail.com>
 Authors@R: person("Richard", "Cotton", role = c("aut", "cre"), email =
