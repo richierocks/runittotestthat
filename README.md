@@ -1,3 +1,7 @@
+[![Project Status: Inactive - The project has reached a stable, usable state but is no longer being actively developed; support/maintenance will be provided as time allows.](http://www.repostatus.org/badges/0.1.0/inactive.svg)](http://www.repostatus.org/#inactive)
+[![Is the package on CRAN?](http://www.r-pkg.org/badges/version/runittotestthat)](http://www.r-pkg.org/pkg/runittotestthat)
+[![Build Status](https://semaphoreci.com/api/v1/projects/527c20b9-03f5-4b7e-b1ed-d9a195771622/635248/badge.svg)](https://semaphoreci.com/richierocks/runittotestthat)
+
 runittotestthat
 ===============
 
@@ -11,7 +15,7 @@ To install, you first need the devtools package.
 install.packages("devtools")
 ```
 
-Then you can install the runittotestthat package using
+Then you can install the *runittotestthat* package using
 
 ```{r}
 library(devtools)
