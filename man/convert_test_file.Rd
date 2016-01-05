@@ -57,6 +57,7 @@ test_error <- function()
   tmp
 )
 convert_test_file(tmp)
+unlink(tmp)
 }
 \seealso{
 \code{\link{convert_package_tests}}, \code{\link{convert_test}}
